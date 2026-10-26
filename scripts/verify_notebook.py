@@ -13,6 +13,8 @@ args=parser.parse_args()
 sys.path.insert(0,str(root))
 from src.gsb_analysis import load_data, summarize
 path=root/'data/raw/gsb_input.xlsx'
+if not path.exists() and (root/'data/raw/gsb_input.csv').exists():
+    path=root/'data/raw/gsb_input.csv'
 before=hashlib.sha256(path.read_bytes()).hexdigest()
 data=load_data(path)
 tables=summarize(data)

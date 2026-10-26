@@ -1,0 +1,18 @@
+[Unit]
+Description=GSB shared notebook with unprivileged isolation and ngrok
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/ABSOLUTE/PATH/TO/GSB-Solution
+ExecStart=/ABSOLUTE/PATH/TO/GSB-Solution/.venv/bin/python scripts/shared_no_sudo.py _serve
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+MemoryMax=3G
+TasksMax=128
+CPUQuota=200%
+
+[Install]
+WantedBy=default.target

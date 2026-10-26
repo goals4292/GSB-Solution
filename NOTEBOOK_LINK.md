@@ -1,13 +1,17 @@
 # 노트북 접속 링크
 
-현재 상태: **외부 서버 미배포, 실제 ngrok 주소 미발급**
+현재 상태: **관리자 권한 없는 격리 서버와 ngrok HTTPS 접속 운영 중**
 
-[공유 링크 배포 안내](docs/shared-link-deploy.md)에 따라 서버를 시작한 후 실행합니다.
+회사 담당자는 운영자가 전달한 전체 링크를 열고 Run → Run All Cells를 선택합니다.
+ngrok 안내가 나오면 Visit Site를 누릅니다. 별도 설치나 비밀번호 입력은 없습니다.
+
+접속 링크에는 실행 권한이 포함되므로 공개 GitHub에는 게시하지 않습니다.
+운영자는 실제 배포 폴더의 private/notebook_link.txt에서 전체 링크를 확인합니다.
+
+운영 안내: [관리자 권한 없는 공유 배포](docs/no-sudo-deploy.md)
+
+사용자 서비스는 서버 로그인 상태에 따라 중지될 수 있습니다. 현재 상태 확인:
 
 ```bash
-.venv/bin/python scripts/make_notebook_link.py
+systemctl --user status gsb-shared-no-sudo.service
 ```
-
-private/notebook_link.txt의 첫 줄 전체를 담당자에게 전달합니다.
-링크를 가진 사람은 비밀번호 입력 없이 노트북을 실행할 수 있습니다.
-실제 링크는 코드 저장소에 포함하지 않습니다.

@@ -9,7 +9,7 @@ Windows PC의 Edge 또는 Chrome에서 JupyterLab 링크를 열어, 준비된 �
 3. `GSB_quality_analysis.ipynb`에서 **Run → Run All Cells**를 누릅니다.
 4. 마지막 셀의 **분석 완료**와 결과 폴더 링크를 확인합니다.
 
-**실행 서버 링크: 아직 배포되지 않았습니다.** [접속 링크 안내](NOTEBOOK_LINK.md)
+**회사 공유 서버 운영 중입니다.** 비밀번호 입력 없는 전체 링크는 담당자에게 별도로 전달합니다. [접속 링크 안내](NOTEBOOK_LINK.md)
 
 GitHub의 노트북 화면은 코드 열람용입니다. 실행은 별도 JupyterLab 서버에서 합니다.
 
@@ -29,7 +29,8 @@ GitHub의 노트북 화면은 코드 열람용입니다. 실행은 별도 Jupyte
 
 ## 문서
 
-- [비밀번호 입력 없는 ngrok 공유 배포](docs/shared-link-deploy.md) — 현재 회사 전달용 구성
+- [관리자 권한 없는 ngrok 공유 배포](docs/no-sudo-deploy.md) — 현재 운영 구성
+- [Docker를 이용한 공유 배포](docs/shared-link-deploy.md) — Docker 권한이 있는 서버용
 
 - [회사 담당자 사용 안내](docs/user-guide.md)
 - [설치·활용 가이드](docs/install-guide.md)

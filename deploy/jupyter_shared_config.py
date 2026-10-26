@@ -11,6 +11,9 @@ if len(token) < 32:
 c.ServerApp.ip = os.environ.get('GSB_BIND_IP', '0.0.0.0')
 c.ServerApp.port = int(os.environ.get('GSB_PORT', '8888'))
 c.ServerApp.port_retries = 0
+if os.environ.get('GSB_SOCKET'):
+    c.ServerApp.sock = os.environ['GSB_SOCKET']
+    c.ServerApp.sock_mode = '0600'
 c.ServerApp.root_dir = str(root)
 c.ServerApp.open_browser = False
 c.ServerApp.default_url = '/lab/tree/GSB_quality_analysis.ipynb'
