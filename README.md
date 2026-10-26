@@ -29,15 +29,11 @@ GitHub의 노트북 화면은 코드 열람용입니다. 실행은 별도 Jupyte
 
 ## 문서
 
-- [관리자 권한 없는 ngrok 공유 배포](docs/no-sudo-deploy.md) — 현재 운영 구성
-- [Docker를 이용한 공유 배포](docs/shared-link-deploy.md) — Docker 권한이 있는 서버용
-
 - [회사 담당자 사용 안내](docs/user-guide.md)
 - [설치·활용 가이드](docs/install-guide.md)
 - [Linux 서버 및 ngrok 운영](docs/server-setup.md)
 - [Windows에서 직접 실행](docs/windows-setup.md)
 - [입력 자료 및 추가 데이터](docs/data-guide.md)
-- [GitHub 등록과 공개 범위](docs/git-guide.md)
 - [분석 노트북](GSB_quality_analysis.ipynb)
 
 ## 파일 구성
