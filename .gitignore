@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.secrets/
+.env
+data/raw/*
+!data/raw/.gitkeep
+outputs/*
+!outputs/.gitkeep
+private/*
+!private/.gitkeep
+*.log
+*.zip

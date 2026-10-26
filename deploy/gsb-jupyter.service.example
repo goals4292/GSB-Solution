@@ -1,0 +1,14 @@
+[Unit]
+Description=GSB JupyterLab
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/REPLACE_USER/GSB-Solution-Data-Analysis
+ExecStart=/home/REPLACE_USER/GSB-Solution-Data-Analysis/.venv/bin/python scripts/start_server.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+
+[Install]
+WantedBy=default.target

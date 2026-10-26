@@ -1,0 +1,4 @@
+**
+!requirements-tested.txt
+!deploy/
+!deploy/jupyter_shared_config.py

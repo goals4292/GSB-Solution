@@ -1,0 +1,40 @@
+services:
+  jupyter:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    user: "${GSB_UID:?Run prepare_shared_runtime.py}:${GSB_GID:?Run prepare_shared_runtime.py}"
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 2g
+    cpus: 2.0
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=512m,mode=1777
+    volumes:
+      - ../private/shared-runtime:/workspace
+    secrets:
+      - jupyter_token
+    networks: [analysis]
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command: ["http", "http://jupyter:8888", "--inspect=false", "--config=/etc/gsb-ngrok.yml"]
+    env_file: ../.secrets/ngrok.env
+    volumes:
+      - ./ngrok.yml:/etc/gsb-ngrok.yml:ro
+    depends_on: [jupyter]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    ports:
+      - "127.0.0.1:4041:4040"
+    networks: [analysis, tunnel]
+networks:
+  analysis:
+    internal: true
+  tunnel: {}
+secrets:
+  jupyter_token:
+    file: ../.secrets/jupyter-token
