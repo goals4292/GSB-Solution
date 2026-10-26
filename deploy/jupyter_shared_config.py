@@ -4,10 +4,13 @@ from pathlib import Path
 
 c = get_config()
 root = Path(os.environ.get('GSB_WORKSPACE', '/workspace')).resolve()
-token_file = Path(os.environ.get('GSB_TOKEN_FILE', '/run/secrets/jupyter_token'))
-token = token_file.read_text(encoding='utf-8').strip()
-if len(token) < 32:
-    raise RuntimeError('Run scripts/prepare_shared_runtime.py to create the link token.')
+public_access = os.environ.get('GSB_PUBLIC_ACCESS') == '1'
+token = ''
+if not public_access:
+    token_file = Path(os.environ.get('GSB_TOKEN_FILE', '/run/secrets/jupyter_token'))
+    token = token_file.read_text(encoding='utf-8').strip()
+    if len(token) < 32:
+        raise RuntimeError('Run scripts/prepare_shared_runtime.py to create the link token.')
 c.ServerApp.ip = os.environ.get('GSB_BIND_IP', '0.0.0.0')
 c.ServerApp.port = int(os.environ.get('GSB_PORT', '8888'))
 c.ServerApp.port_retries = 0

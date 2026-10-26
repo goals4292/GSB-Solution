@@ -1,4 +1,4 @@
-"""Exercise real login, namespace isolation, WebSocket execution and notebook saving."""
+"""Verify anonymous access, XSRF protection, isolation and complete execution."""
 from pathlib import Path
 from datetime import datetime, timezone
 import argparse
@@ -15,18 +15,23 @@ p.add_argument('--local', action='store_true')
 args = p.parse_args()
 status = json.loads((STATE / 'status.json').read_text())
 base = f'http://127.0.0.1:{status["proxy_port"]}' if args.local else status['public_url']
-token = (ROOT / '.secrets/jupyter-token').read_text().strip()
 session = requests.Session()
 session.headers['ngrok-skip-browser-warning'] = 'verification'
-assert session.get(base + '/api/contents', allow_redirects=False, timeout=20).status_code in (302, 403)
-page = session.get(base + '/lab/tree/GSB_quality_analysis.ipynb', params={'token': token}, timeout=30)
+assert session.get(base + '/api/contents', allow_redirects=False, timeout=20).status_code == 200
+page = session.get(base + '/lab/tree/GSB_quality_analysis.ipynb', timeout=30)
 page.raise_for_status()
+assert '/login' not in urlsplit(page.url).path
+assert 'Token authentication is enabled' not in page.text
 response = session.get(base + '/api/contents/GSB_quality_analysis.ipynb', timeout=20)
 response.raise_for_status()
 nb = nbformat.from_dict(response.json()['content'])
-assert session.cookies, 'Token link did not create a browser session'
-print('PASS: link login and notebook loading without a password.', flush=True)
-session.headers['Authorization'] = 'token ' + token
+xsrf = session.cookies.get('_xsrf')
+assert xsrf, 'Expected the browser XSRF cookie'
+denied = session.post(base + '/api/kernels', json={'name': 'python3'}, timeout=20)
+assert denied.status_code == 403, 'Mutating requests without XSRF proof must be rejected'
+session.headers['X-XSRFToken'] = xsrf
+session.headers['Referer'] = base + '/lab'
+print('PASS: fresh unauthenticated access without token/password; XSRF protection retained.', flush=True)
 response = session.post(base + '/api/kernels', json={'name': 'python3'}, timeout=30)
 response.raise_for_status()
 kid = response.json()['id']
@@ -34,8 +39,9 @@ parts = urlsplit(base)
 url = ('wss' if parts.scheme == 'https' else 'ws') + '://' + parts.netloc + f'/api/kernels/{kid}/channels?session_id={uuid.uuid4().hex}'
 ws = None
 try:
-    ws = websocket.create_connection(url, origin=base, header=['Authorization: token ' + token,
-                                    'ngrok-skip-browser-warning: verification'], timeout=120)
+    ws = websocket.create_connection(url, origin=base,
+                                    header=['ngrok-skip-browser-warning: verification'],
+                                    cookie='; '.join(f'{k}={v}' for k, v in session.cookies.items()), timeout=120)
     sid = uuid.uuid4().hex
 
     def execute(code, history=True):

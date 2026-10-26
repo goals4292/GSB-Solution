@@ -8,7 +8,7 @@ Docker나 sudo는 사용하지 않습니다.
 
 운영자가 보낸 **전체 링크**를 Windows의 Edge/Chrome에서 엽니다. ngrok 안내가 나오면
 Visit Site를 누릅니다. 노트북에서 Run → Run All Cells를 선택하면 됩니다.
-설치·회원가입·비밀번호 입력은 없습니다. 링크를 가진 사람은 같은 작업공간에서
+설치·회원가입·접속용 토큰·비밀번호 입력은 없습니다. 링크를 가진 사람은 같은 작업공간에서
 코드를 실행하고 자료를 수정할 수 있으므로 한 번에 한 담당자가 사용합니다.
 
 ## 운영자 준비
@@ -40,7 +40,9 @@ ngrok 공식 Linux 배포 파일의 실행 파일은 PATH 또는
 ```
 
 status의 state가 ready가 되면 private/notebook_link.txt에 생성된 첫 줄 전체를 전달합니다.
-토큰은 숨김 입력으로 저장하며 Git에 포함하지 않습니다. start는 백그라운드 실행입니다.
+ngrok 계정 authtoken만 운영자의 숨김 입력으로 저장하며 Git에 포함하지 않습니다.
+회사 접속 URL에는 토큰 쿼리가 없습니다. Jupyter 인증은 명시적으로 해제하고,
+XSRF 보호와 파일·프로세스·네트워크 격리는 유지합니다. start는 백그라운드 실행입니다.
 정지는 `.venv/bin/python scripts/shared_no_sudo.py stop`입니다.
 먼저 외부 연결 없이 시험하려면 start에 --local-only를 붙입니다. 공개 시작 전 stop합니다.
 
@@ -83,7 +85,7 @@ no이면 마지막 로그인 세션 종료나 서버 재부팅 시 접속이 끊
 .venv/bin/python scripts/verify_shared_server.py
 ```
 
-외부 HTTPS 로그인, 호스트 파일/네트워크/프로세스 격리, 실제 WebSocket 커널 실행,
+쿠키·인증정보 없는 외부 HTTPS 접속, XSRF 보호, 호스트 파일/네트워크/프로세스 격리, 실제 WebSocket 커널 실행,
 전체 셀 결과 및 그래프 저장을 검증합니다. --local 옵션은 로컬 중계 서버를 시험합니다.
 회사 Windows 브라우저에서의 수동 화면 확인은 별도입니다.
 

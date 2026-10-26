@@ -18,7 +18,6 @@ import struct
 import subprocess
 import sys
 import time
-from urllib.parse import urlencode
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -81,14 +80,13 @@ def sandbox_command(info_fd):
     for name in ['hosts', 'passwd', 'group']:
         cmd += ['--ro-bind', str(STATE / name), '/etc/' + name]
     cmd += ['--bind', str(WORK), '/workspace', '--bind', str(socks), '/run/gsb',
-            '--ro-bind', str(ROOT / '.secrets/jupyter-token'), '/run/jupyter-token',
             '--ro-bind', str(ROOT / 'deploy/jupyter_shared_config.py'), '/run/jupyter_config.py',
             '--chdir', '/workspace']
     env = {'HOME': '/tmp/gsb-home', 'USER': 'gsb', 'LOGNAME': 'gsb',
            'PATH': str(venv / 'bin') + ':/usr/bin:/bin', 'LANG': 'C.UTF-8', 'TZ': 'Asia/Seoul',
            'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONUNBUFFERED': '1',
            'JUPYTER_RUNTIME_DIR': '/tmp/jupyter-runtime', 'GSB_WORKSPACE': '/workspace',
-           'GSB_TOKEN_FILE': '/run/jupyter-token', 'GSB_SOCKET': '/run/gsb/jupyter.sock',
+           'GSB_PUBLIC_ACCESS': '1', 'GSB_SOCKET': '/run/gsb/jupyter.sock',
            'OPENBLAS_NUM_THREADS': '1', 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1'}
     for name, value in env.items():
         cmd += ['--setenv', name, value]
@@ -203,8 +201,7 @@ async def serve(local_only):
                 await asyncio.sleep(1)
             else:
                 raise RuntimeError('ngrok endpoint startup timed out')
-            token = (ROOT / '.secrets/jupyter-token').read_text().strip()
-            link = public + '/lab/tree/GSB_quality_analysis.ipynb?' + urlencode({'token': token})
+            link = public + '/lab/tree/GSB_quality_analysis.ipynb'
             target = ROOT / 'private/notebook_link.txt'
             fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
             with os.fdopen(fd, 'w') as f:
@@ -263,7 +260,7 @@ def main():
     if args.action == 'start':
         if running():
             print('Already running; use status or stop first.'); return
-        required = [WORK / 'GSB_quality_analysis.ipynb', ROOT / '.secrets/jupyter-token']
+        required = [WORK / 'GSB_quality_analysis.ipynb']
         if not args.local_only:
             required.append(ROOT / '.secrets/ngrok.env')
         if any(not p.is_file() for p in required):
