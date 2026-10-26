@@ -21,6 +21,13 @@ docker compose --env-file .secrets/deploy.env -f deploy/compose.shared.yml up -d
 .venv/bin/python scripts/make_notebook_link.py
 ```
 
+현재 계정에서 Docker 소켓 접근이 거부되면 관리자 권한이 필요합니다.
+이 서버에 설치한 사용자용 Docker 플러그인을 sudo로 사용하는 명령은 다음과 같습니다.
+
+```bash
+sudo docker --config "$HOME/.docker" compose --env-file .secrets/deploy.env -f deploy/compose.shared.yml up -d --build
+```
+
 ngrok 토큰은 setup_ngrok.py의 숨김 입력창에 입력합니다. 채팅이나 GitHub에 올리지 않습니다.
 마지막 명령은 로컬 ngrok API에서 주소를 읽고 private/notebook_link.txt에 전체 링크를
 저장합니다. ngrok 시작 직후에는 잠시 기다린 뒤 다시 실행하세요.
