@@ -8,7 +8,7 @@ Visit Site를 누른 뒤 Run → Run All Cells를 실행합니다. 설치와 비
 
 ## 운영자 준비와 실행
 
-Docker Engine과 Compose v2가 설치되고 현재 계정에서 `docker info`가 성공해야 합니다.
+Docker Engine과 Compose 플러그인가 설치되고 현재 계정에서 `docker info`가 성공해야 합니다.
 ngrok 계정의 authtoken과 `data/raw/gsb_input.xlsx`도 필요합니다.
 공개 코드 배포본은 Python 3.12 가상환경을 만들고 requirements-tested.txt로 설치합니다.
 
