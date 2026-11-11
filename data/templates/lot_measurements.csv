@@ -1,1 +1,1 @@
-﻿part_no,lot,sheet_year,forming_date,thread_date,forming_diameter_mm,thread_diameter_mm,forming_produced,forming_defects,thread_produced,thread_defects
+﻿part_no,lot,sheet_year,forming_date,thread_date,forming_diameter_mm,thread_diameter_mm,forming_produced,forming_defects,thread_produced,thread_defects,forming_length_mm,thread_length_mm,forming_equipment,thread_equipment
